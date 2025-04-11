@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Timeline (2022-2025)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f9fafb;
+            padding: 1.5rem;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #1f2937;
+        }
+        
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+        }
+        
+        .btn-all {
+            background-color: #1f2937;
+            color: white;
+        }
+        
+        .btn-all.inactive {
+            background-color: #e5e7eb;
+            color: #1f2937;
+        }
+        
+        .btn-2022 {
+            background-color: #9B5DE5;
+            color: white;
+        }
+        
+        .btn-2022.inactive {
+            background-color: #EBE3FC;
+            color: #1f2937;
+        }
+        
+        .btn-2023 {
+            background-color: #F15BB5;
+            color: white;
+        }
+        
+        .btn-2023.inactive {
+            background-color: #FCE3F3;
+            color: #1f2937;
+        }
+        
+        .btn-2024 {
+            background-color: #00BBF9;
+            color: white;
+        }
+        
+        .btn-2024.inactive {
+            background-color: #E3F4FC;
+            color: #1f2937;
+        }
+        
+        .btn-2025 {
+            background-color: #00F5D4;
+            color: white;
+        }
+        
+        .btn-2025.inactive {
+            background-color: #E3FCF7;
+            color: #1f2937;
+        }
+        
+        .timeline-container {
+            overflow-y: auto;
+            max-height: calc(100vh - 200px);
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            height: 100%;
+            width: 0.25rem;
+            background-color: #d1d5db;
+            left: 1rem;
+            top: 0;
+        }
+        
+        .event {
+            display: flex;
+            margin-bottom: 2rem;
+        }
+        
+        .event-month {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            z-index: 10;
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+        
+        .event-content {
+            margin-left: 1rem;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        
+        .event-title {
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .event-date {
+            font-size: 0.875rem;
+            color: #6b7280;
+            white-space: nowrap;
+        }
+        
+        .counter {
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Project Timeline (2022-2025)</h1>
+        
+        <div class="filter-buttons">
+            <button class="btn btn-all" data-year="all">All Years</button>
+            <button class="btn btn-2022 inactive" data-year="2022">2022</button>
+            <button class="btn btn-2023 inactive" data-year="2023">2023</button>
+            <button class="btn btn-2024 inactive" data-year="2024">2024</button>
+            <button class="btn btn-2025 inactive" data-year="2025">2025</button>
+        </div>
+        
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+            <div id="events-container"></div>
+        </div>
+        
+        <div class="counter" id="counter"></div>
+    </div>
+
+    <script>
+        // Event data
+        const events = [
+            // 2022
+            { id: 1, date: "2022-11-10", title: "VERSE十月講座劉克襄：我在臺灣三大步道的走路故事", year: "2022" },
+            { id: 2, date: "2022-11-16", title: "李明璁 X 不務正業男子Ayo：在市場的小宇宙感受五色的衝擊", year: "2022" },
+            { id: 3, date: "2022-11-20", title: "2022 教育廣播高中Podcast入門研習營隊", year: "2022" },
+            { id: 4, date: "2022-11-27", title: "《2022奧夫塞計畫-高德亮作品展》創作沙龍", year: "2022" },
+            { id: 5, date: "2022-12-17", title: "【樂團職人系列講座】公館青少年の樂團創作與發片分享", year: "2022" },
+            
+            // 2023
+            { id: 6, date: "2023-02-07", title: "寒假培訓 (「海洋危機」遊戲、「海龜點點名」)", year: "2023" },
+            { id: 7, date: "2023-02-08", title: "至海洋大學向教授請益專題 FTIR", year: "2023" },
+            { id: 8, date: "2023-02-11", title: "海洋女力科學家", year: "2023" },
+            { id: 9, date: "2023-02-25", title: "2023第22屆紅樓現代文學獎暨全國高中紅樓文學獎 (開始)", year: "2023" },
+            { id: 10, date: "2023-03-03", title: "分光光度計；檢量線測量實驗", year: "2023" },
+            { id: 11, date: "2023-03-03", title: "表面張力實驗照片 表面張力 原始照片(持續協助學長姊的吸附實驗)", year: "2023" },
+            { id: 12, date: "2023-03-10", title: "第一次做表面張力實驗(開始測量角度:線上量角器)", year: "2023" },
+            { id: 13, date: "2023-03-15", title: "1120310梯次閱讀心得比賽優等", year: "2023" },
+            { id: 14, date: "2023-03-17", title: "第二次做表面張力實驗(找到量測適合方法與利用excel做紀錄)", year: "2023" },
+            { id: 15, date: "2023-03-19", title: "2023新北市萬金石馬拉松", year: "2023" },
+            { id: 16, date: "2023-04-07", title: "不同程度下吸附與不同溫度下口罩片顯微鏡觀察", year: "2023" },
+            { id: 17, date: "2023-04-14", title: "顯微鏡來觀察出口罩片在其他環境下影響出的纖維破損以及構造的觀察", year: "2023" },
+            { id: 18, date: "2023-05-01", title: "利用線上方式來找尋適合題目的論文以及統整出所需的架構以及內容(學習學習方法)", year: "2023" },
+            { id: 19, date: "2023-05-14", title: "2023台北舒跑杯", year: "2023" },
+            { id: 20, date: "2023-05-20", title: "創社招人", year: "2023" },
+            { id: 21, date: "2023-05-28", title: "2023第22屆紅樓現代文學獎暨全國高中紅樓文學獎 (結束)", year: "2023" },
+            { id: 22, date: "2023-06-16", title: "第一次日本姊妹校Ocean Well-being線上交流", year: "2023" },
+            { id: 23, date: "2023-07-08", title: "鱟Id 海科館推廣活動-負責腳本工作", year: "2023" },
+            { id: 24, date: "2023-07-24", title: "第62屆全國科展見習打工", year: "2023" },
+            { id: 25, date: "2023-08-15", title: "2023第一屆全國NODASS諾大師-海洋大數據競賽共識營", year: "2023" },
+            { id: 26, date: "2023-08-15", title: "創社成功", year: "2023" },
+            { id: 27, date: "2023-09-14", title: "2023第一屆全國NODASS諾大師-海洋大數據競賽初賽報告書繳交", year: "2023" },
+            { id: 28, date: "2023-09-17", title: "2023年宜蘭冬山河112學年度全國鐵人三項錦標賽", year: "2023" },
+            { id: 29, date: "2023-09-22", title: "出海調查微塑膠監測", year: "2023" },
+            { id: 30, date: "2023-11-09", title: "第二次日本姊妹校Ocean Well-being線上交流", year: "2023" },
+            { id: 31, date: "2023-12-06", title: "2023 臺灣燈塔教育節-鱟 ido", year: "2023" },
+            { id: 32, date: "2023-12-16", title: "全國自主學習交流分享會—台中東海大學", year: "2023" },
+            { id: 33, date: "2023-12-23", title: "藍海拾貝課程成果發表會", year: "2023" },
+            
+            // 2024
+            { id: 34, date: "2024-01-20", title: "領營隊生玩海洋危機大班玩法", year: "2024" },
+            { id: 35, date: "2024-02-05", title: "113年2月暖暖中學暨健全基隆移地課程", year: "2024" },
+            { id: 36, date: "2024-02-18", title: "畢業旅行之半環島", year: "2024" },
+            { id: 37, date: "2024-03-06", title: "第二次日本姊妹校Ocean Well-being實體交流", year: "2024" },
+            { id: 38, date: "2024-04-28", title: "全國自主學習交流分享會-基隆海科館", year: "2024" },
+            { id: 39, date: "2024-05-18", title: "113年海大環境教育增能課程", year: "2024" },
+            { id: 40, date: "2024-05-25", title: "新一代設計展", year: "2024" },
+            { id: 41, date: "2024-05-28", title: "113學年度暖暖高中海洋數位閱讀實施計畫", year: "2024" },
+            { id: 42, date: "2024-07-03", title: "全國創遊微翻轉嘉年華會工作人員", year: "2024" },
+            { id: 43, date: "2024-07-11", title: "2024日本姊妹校臺日菲國際交流論壇", year: "2024" },
+            { id: 44, date: "2024-07-18", title: "2024諾大師海洋大數據競賽培訓工作坊", year: "2024" },
+            { id: 45, date: "2024-08-20", title: "國際海洋人才培訓論壇", year: "2024" },
+            { id: 46, date: "2024-08-29", title: "新北2024國際青年行動論壇", year: "2024" },
+            { id: 47, date: "2024-09-10", title: "2024臺灣國際水論壇", year: "2024" },
+            { id: 48, date: "2024-09-11", title: "舉辦親子教學活動-暑期親子探索海洋活動", year: "2024" },
+            { id: 49, date: "2024-09-23", title: "2024海洋廢棄物國際研討會", year: "2024" },
+            { id: 50, date: "2024-10-18", title: "2024台灣氣候行動博覽會", year: "2024" },
+            { id: 51, date: "2024-10-25", title: "2024第四屆海洋法政學習體驗心得競賽", year: "2024" },
+            { id: 52, date: "2024-11-11", title: "113學年度數理及資訊學科能力競賽", year: "2024" },
+            { id: 53, date: "2024-11-30", title: "海洋碳匯種子教師增能工作坊", year: "2024" },
+            { id: 54, date: "2024-12-14", title: "從地方生成｜113年青年社區參與行動2.0 Changemaker暨青聚點計畫成果展", year: "2024" },
+            { id: 55, date: "2024-12-21", title: "2024 PHOTO GO TAIPEI 攝影上桌- 展覽", year: "2024" },
+            { id: 56, date: "2024-12-22", title: "思佑社會學嘉義專案", year: "2024" },
+            { id: 57, date: "2024-12-30", title: "伊利歐X暖暖 小約爬山", year: "2024" },
+            
+            // 2025
+            { id: 58, date: "2025-01-03", title: "校內小型Machiaruki成果報告", year: "2025" },
+            { id: 59, date: "2025-01-21", title: "114 年高級中等學校原住民族地球科學科學人才培訓計畫", year: "2025" },
+            { id: 60, date: "2025-02-03", title: "成大生成式AI應用程式開發工作坊", year: "2025" },
+            { id: 61, date: "2025-02-05", title: "嘉義高中兒童哲學課程", year: "2025" },
+            { id: 62, date: "2025-02-08", title: "攀樹丙級證照班", year: "2025" },
+            { id: 63, date: "2025-02-16", title: "「盛夏時節的詩與遠方 」-喀什米爾七大湖健行分享會", year: "2025" },
+            { id: 64, date: "2025-02-18", title: "「氣候危機，核去核從？全球能源轉型下的核能爭議」論壇", year: "2025" },
+            { id: 65, date: "2025-02-20", title: "「藍色共鳴、海洋為盟」海洋保育ESG論壇", year: "2025" },
+            { id: 66, date: "2025-02-25", title: "藝文組織永續營運管理進階班⑦【展場與文創產品的綠色解方與永續材質交流座談會】", year: "2025" },
+            { id: 67, date: "2025-02-26", title: "2025HR×ESG企業文化暨永續行動論壇【行動指南手冊發布會】", year: "2025" },
+            { id: 68, date: "2025-03-05", title: "日本交流會(攝影工作)", year: "2025" },
+            { id: 69, date: "2025-03-15", title: "Scrapyard 黑客松", year: "2025" }
+        ];
+
+        // Helper functions
+        const getYearColor = (year) => {
+            const colors = {
+                '2022': '#9B5DE5',
+                '2023': '#F15BB5',
+                '2024': '#00BBF9',
+                '2025': '#00F5D4'
+            };
+            return colors[year] || '#9B5DE5';
+        };
+
+        const getMonthName = (date) => {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const dateObj = new Date(date);
+            return months[dateObj.getMonth()];
+        };
+
+        const formatDate = (dateString) => {
+            const date = new Date(dateString);
+            return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        };
+
+        // DOM elements
+        const eventsContainer = document.getElementById('events-container');
+        const counter = document.getElementById('counter');
+        const filterButtons = document.querySelectorAll('.filter-buttons .btn');
+        
+        // Current selected year state
+        let selectedYear = 'all';
+
+        // Render events function
+        function renderEvents() {
+            // Filter events by selected year
+            const filteredEvents = selectedYear === 'all' 
+                ? events 
+                : events.filter(event => event.year === selectedYear);
+            
+            // Clear events container
+            eventsContainer.innerHTML = '';
+            
+            // Create event elements
+            filteredEvents.forEach(event => {
+                const eventEl = document.createElement('div');
+                eventEl.className = 'event';
+                eventEl.dataset.year = event.year;
+                
+                const monthEl = document.createElement('div');
+                monthEl.className = 'event-month';
+                monthEl.style.backgroundColor = getYearColor(event.year);
+                monthEl.textContent = getMonthName(event.date);
+                
+                const contentEl = document.createElement('div');
+                contentEl.className = 'event-content';
+                contentEl.style.borderLeft = `4px solid ${getYearColor(event.year)}`;
+                
+                const headerEl = document.createElement('div');
+                headerEl.className = 'event-header';
+                
+                const titleEl = document.createElement('h3');
+                titleEl.className = 'event-title';
+                titleEl.textContent = event.title;
+                
+                const dateEl = document.createElement('span');
+                dateEl.className = 'event-date';
+                dateEl.textContent = formatDate(event.date);
+                
+                headerEl.appendChild(titleEl);
+                headerEl.appendChild(dateEl);
+                contentEl.appendChild(headerEl);
+                
+                eventEl.appendChild(monthEl);
+                eventEl.appendChild(contentEl);
+                
+                eventsContainer.appendChild(eventEl);
+            });
+            
+            // Update counter
+            counter.textContent = `Total events: ${filteredEvents.length} ${selectedYear !== 'all' ? `in ${selectedYear}` : '(2022-2025)'}`;
+        }
+
+        // Update buttons style
+        function updateButtons() {
+            filterButtons.forEach(button => {
+                const year = button.dataset.year;
+                if (year === selectedYear) {
+                    button.classList.remove('inactive');
+                } else {
+                    button.classList.add('inactive');
+                }
+            });
+        }
+
+        // Add event listeners to filter buttons
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                selectedYear = button.dataset.year;
+                updateButtons();
+                renderEvents();
+            });
+        });
+
+        // Initial render
+        renderEvents();
+    </script>
+</body>
+</html>
